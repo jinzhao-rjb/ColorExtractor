@@ -12,15 +12,21 @@ node_modules
 .pnp
 .pnp.js
 
-# Build files
+# Testing
+coverage
+*.lcov
+.nyc_output
+
+# Production
+build
 dist
 dist-ssr
 *.local
-build
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -36,14 +42,10 @@ build
 .env.test.local
 .env.production.local
 
-# OS generated files
-Thumbs.db
-
-# Testing
-coverage
-*.lcov
-.nyc_output
-
 # Temporary files
 *.tmp
 *.temp
+.cache
+
+# OS generated files
+Thumbs.db
