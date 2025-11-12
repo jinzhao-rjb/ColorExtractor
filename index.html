@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片颜色提取工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 深色模式切换按钮 -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="切换深色模式">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29l-1.43-1.43z"/>
+        </svg>
+    </button>
+    
+    <div class="app-container">
+        <div class="container">
+        <header>
+            <h1>图片颜色提取工具</h1>
+            <p>上传图片，获取图片中的主要颜色</p>
+        </header>
+        
+        <main>
+            <section class="upload-section">
+                <div class="upload-container">
+                    <input type="file" id="image-upload" accept="image/*">
+                    <label for="image-upload" class="upload-label">
+                        <div class="upload-icon">📁</div>
+                        <p>点击上传图片或拖拽到此处</p>
+                        <small>支持JPG、PNG、WEBP等格式</small>
+                    </label>
+                </div>
+            </section>
+            
+            <section class="preview-section" id="preview-section">
+                <div class="image-preview-container">
+                    <img id="image-preview" alt="预览图片">
+                </div>
+            </section>
+            
+            <section class="colors-section">
+                <h2>提取的主要颜色</h2>
+                <div class="colors-container" id="colors-container">
+                    <!-- 颜色块将在这里动态生成 -->
+                </div>
+            </section>
+            
+            <section class="options-section">
+                <div class="option-group">
+                    <label for="color-count">颜色数量:</label>
+                    <input type="range" id="color-count" min="3" max="10" value="6">
+                    <span id="color-count-value">6</span>
+                </div>
+                <div class="option-group">
+                    <label for="extract-method">提取方法:</label>
+                    <select id="extract-method">
+                        <option value="kmeans">K-means聚类</option>
+                        <option value="frequent">最频繁颜色</option>
+                        <option value="dominant">主色调提取</option>
+                        <option value="median">中位切分法</option>
+                        <option value="layered">颜色分层提取</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="color-format">颜色格式:</label>
+                    <select id="color-format">
+                        <option value="hex">HEX (#RRGGBB)</option>
+                        <option value="rgb">RGB (rgb(r,g,b))</option>
+                    </select>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 图片颜色提取工具 | 设计与开发</p>
+        </footer>
+    </div>
+    
+    </div>
+    
+    <div class="toast" id="toast">
+        颜色已复制到剪贴板
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
