@@ -304,6 +304,119 @@ extractMethod?.addEventListener('change', () => {
     }
 });
 
+// 点击提取颜色功能
+function setupColorPicker() {
+    const imagePreview = document.getElementById('image-preview');
+    if (!imagePreview) return;
+    
+    // 创建Canvas元素用于获取像素数据
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 等待图片加载完成后绘制到Canvas
+    if (imagePreview.complete) {
+        drawImageToCanvas();
+    } else {
+        imagePreview.addEventListener('load', drawImageToCanvas);
+    }
+    
+    function drawImageToCanvas() {
+        // 设置Canvas尺寸与原始图片一致
+        canvas.width = currentImage.width;
+        canvas.height = currentImage.height;
+        
+        // 绘制图片到Canvas
+        ctx.drawImage(currentImage, 0, 0);
+    }
+    
+    // 添加点击事件监听器
+    imagePreview.addEventListener('click', (e) => {
+        const rect = imagePreview.getBoundingClientRect();
+        const scaleX = currentImage.width / rect.width;
+        const scaleY = currentImage.height / rect.height;
+        
+        // 计算点击位置相对于原始图片的坐标
+        const x = Math.floor((e.clientX - rect.left) * scaleX);
+        const y = Math.floor((e.clientY - rect.top) * scaleY);
+        
+        // 获取像素颜色
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        const r = pixel[0];
+        const g = pixel[1];
+        const b = pixel[2];
+        const a = pixel[3];
+        
+        // 转换为HEX格式
+        const hex = rgbToHex(r, g, b);
+        
+        // 显示提取的颜色
+        showClickedColor(r, g, b, hex);
+    });
+}
+
+// RGB转HEX函数
+function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('').toUpperCase();
+}
+
+// 显示点击提取的颜色
+function showClickedColor(r, g, b, hex) {
+    // 创建颜色信息元素
+    let colorInfo = document.getElementById('clicked-color-info');
+    if (!colorInfo) {
+        colorInfo = document.createElement('div');
+        colorInfo.id = 'clicked-color-info';
+        colorInfo.className = 'clicked-color-info';
+        
+        // 添加到DOM
+        const previewSection = document.getElementById('preview-section');
+        if (previewSection) {
+            previewSection.appendChild(colorInfo);
+        }
+    }
+    
+    // 更新颜色信息
+    colorInfo.innerHTML = `
+        <div class="clicked-color-header">
+            <h3>点击位置的颜色</h3>
+        </div>
+        <div class="clicked-color-content">
+            <div class="clicked-color-preview" style="background-color: ${hex}"></div>
+            <div class="clicked-color-details">
+                <div class="color-value">
+                    <span class="label">HEX:</span>
+                    <span class="value" id="clicked-hex">${hex}</span>
+                    <button class="copy-btn" data-copy="${hex}">复制</button>
+                </div>
+                <div class="color-value">
+                    <span class="label">RGB:</span>
+                    <span class="value" id="clicked-rgb">rgb(${r}, ${g}, ${b})</span>
+                    <button class="copy-btn" data-copy="rgb(${r}, ${g}, ${b})">复制</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 添加复制按钮事件监听器
+    const copyBtns = colorInfo.querySelectorAll('.copy-btn');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const textToCopy = btn.getAttribute('data-copy');
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showToast(`已复制: ${textToCopy}`);
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    showToast('复制失败，请手动复制');
+                });
+        });
+    });
+}
+
 // 监听图片上传
 imageUpload.addEventListener('change', handleImageUpload);
 
@@ -443,6 +556,8 @@ function handleFileUpload(file) {
                         showToast('图片加载成功');
                         // 提取颜色
                         extractColors();
+                        // 添加点击提取颜色功能
+                        setupColorPicker();
                     } catch (error) {
                         console.error('图片加载后处理出错:', error);
                         showToast('图片处理失败: ' + (error.message || '未知错误'));

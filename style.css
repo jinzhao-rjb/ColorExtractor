@@ -597,6 +597,105 @@ footer {
     box-shadow: var(--shadow-medium);
 }
 
+/* 点击提取颜色样式 */
+#image-preview {
+    cursor: crosshair;
+}
+
+.clicked-color-info {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.clicked-color-header h3 {
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.clicked-color-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.clicked-color-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-medium);
+    border: 2px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.clicked-color-preview:hover {
+    transform: scale(1.05);
+}
+
+.clicked-color-details {
+    flex: 1;
+    min-width: 200px;
+}
+
+.clicked-color-details .color-value {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+
+.clicked-color-details .color-value:last-child {
+    margin-bottom: 0;
+}
+
+.clicked-color-details .label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 40px;
+}
+
+.clicked-color-details .value {
+    flex: 1;
+    color: var(--text-primary);
+    word-break: break-all;
+}
+
+.clicked-color-details .copy-btn {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-light);
+}
+
+.clicked-color-details .copy-btn:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.clicked-color-details .copy-btn:active {
+    transform: translateY(0);
+    transition: transform 0.1s ease;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     main {
@@ -622,5 +721,19 @@ footer {
     
     #image-preview {
         max-height: 300px;
+    }
+    
+    .clicked-color-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .clicked-color-preview {
+        width: 100%;
+        height: 120px;
+    }
+    
+    .clicked-color-details {
+        min-width: auto;
     }
 }
